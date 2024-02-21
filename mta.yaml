@@ -1,0 +1,40 @@
+_schema-version: '3.1'
+ID: spring-boot-demo
+version: 1.0.0
+
+modules:
+  - name: spring-boot-demo
+    type: java
+    path: ./
+    parameters:
+      memory: 256M
+      disk-quota: 512M
+      buildpack: sap_java_buildpack
+    provides:
+      - name: java-api
+        properties:
+          java-url: ${default-url}
+    requires:
+      - name: spring-boot-auth
+    build-parameters:
+      builder: maven
+      build-result: target/demo-0.0.1-SNAPSHOT.jar
+      properties:
+        maven.compiler.source: 17
+        maven.compiler.target: 17
+    properties:
+      SPRING_PROFILES_ACTIVE: cloud
+      JBP_CONFIG_COMPONENTS: "jres: ['com.sap.xs.java.buildpack.jre.SAPMachineJRE']"
+      JBP_CONFIG_SAP_MACHINE_JRE: '{ version: 17.+ }'
+
+resources:
+  - name: spring-boot-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      config:
+        xsappname: spring-boot-demo
+        tenant-mode: dedicated
+      service-keys:
+        - name: spring-boot-auth-key

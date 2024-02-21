@@ -1,0 +1,18 @@
+### Pre-Test. Naive Request
+GET https://spring-boot-demo.cfapps.ap12.hana.ondemand.com/hello
+Content-Type: application/json
+
+### Step 1. Get OAuth2 Token
+POST https://<subdomain>.authentication.ap12.hana.ondemand.com/oauth/token
+Content-type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id=<client_id>&client_secret=<client_secret>
+
+### Step 2. Request with Token
+GET https://skcc-dev-skerp1-finance-spring-boot-demo.cfapps.ap12.hana.ondemand.com/hello
+Content-Type: application/json
+Authorization: bearer <access_token>
+
+### Step 1 + 2. Request Destination
+GET http://spring-boot-api.dest/hello
+Content-Type: application/json
